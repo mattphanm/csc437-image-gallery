@@ -4,8 +4,8 @@ import { VALID_ROUTES } from "../shared/ValidRoutes.js";
 
 export function ImageGrid(props) {
     const imageElements = props.images.map((image) => (
-        <div key={image.id} className="ImageGrid-photo-container">
-            <Link to={VALID_ROUTES.IMAGE_DETAILS.replace(":imageId", image.id)}>
+        <div key={image._id} className="ImageGrid-photo-container">
+            <Link to={VALID_ROUTES.IMAGE_DETAILS.replace(":imageId", image._id)}>
                 <img src={image.src} alt={image.name}/>
             </Link>
         </div>

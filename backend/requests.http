@@ -1,0 +1,40 @@
+###
+GET http://localhost:3000/api/images
+
+###
+GET http://localhost:3000/api/images/69ae1f79a1da3b3dc90cdbbb
+
+###
+GET http://localhost:3000/api/images/not-a-valid-object-id
+
+###
+PATCH http://localhost:3000/api/images/69ae1f79a1da3b3dc90cdbbb
+Content-Type: application/json
+
+{
+  "name": "Renamed from requests.http"
+}
+
+###
+PATCH http://localhost:3000/api/images/69ae1f79a1da3b3dc90cdbbb
+Content-Type: application/json
+
+{
+  "title": "Wrong field"
+}
+
+###
+PATCH http://localhost:3000/api/images/69ae1f79a1da3b3dc90cdbbb
+Content-Type: application/json
+
+{
+  "name": "This image name is intentionally made very very very very very very very very very very very long to exceed one hundred characters"
+}
+
+###
+PATCH http://localhost:3000/api/images/000000000000000000000000
+Content-Type: application/json
+
+{
+  "name": "Name for non-existent image"
+}
