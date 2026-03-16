@@ -132,3 +132,4 @@ dist
 # macOS and IDE files
 .idea
 .DS_Store
+backend/uploads/

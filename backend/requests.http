@@ -1,15 +1,76 @@
 ###
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "username": "chunkylover23",
+  "email": "chunkylover23@example.com",
+  "password": "password"
+}
+
+###
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "username": "chunkylover23",
+  "email": "dupe@example.com",
+  "password": "password"
+}
+
+###
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "username": "missing-email-and-password"
+}
+
+###
+POST http://localhost:3000/api/auth/tokens
+Content-Type: application/json
+
+{
+  "username": "chunkylover23",
+  "password": "password"
+}
+
+###
+POST http://localhost:3000/api/auth/tokens
+Content-Type: application/json
+
+{
+  "username": "chunkylover23",
+  "password": "wrong-password"
+}
+
+###
+POST http://localhost:3000/api/auth/tokens
+Content-Type: application/json
+
+{
+  "username": "missing-password"
+}
+
+###
 GET http://localhost:3000/api/images
 
 ###
+GET http://localhost:3000/api/images
+Authorization: Bearer JWT_PLACEHOLD
+
+###
 GET http://localhost:3000/api/images/69ae1f79a1da3b3dc90cdbbb
+Authorization: Bearer JWT_PLACEHOLD
 
 ###
 GET http://localhost:3000/api/images/not-a-valid-object-id
+Authorization: Bearer JWT_PLACEHOLD
 
 ###
 PATCH http://localhost:3000/api/images/69ae1f79a1da3b3dc90cdbbb
 Content-Type: application/json
+Authorization: Bearer JWT_PLACEHOLD
 
 {
   "name": "Renamed from requests.http"
@@ -18,6 +79,7 @@ Content-Type: application/json
 ###
 PATCH http://localhost:3000/api/images/69ae1f79a1da3b3dc90cdbbb
 Content-Type: application/json
+Authorization: Bearer JWT_PLACEHOLD
 
 {
   "title": "Wrong field"
@@ -26,6 +88,7 @@ Content-Type: application/json
 ###
 PATCH http://localhost:3000/api/images/69ae1f79a1da3b3dc90cdbbb
 Content-Type: application/json
+Authorization: Bearer JWT_PLACEHOLD
 
 {
   "name": "This image name is intentionally made very very very very very very very very very very very long to exceed one hundred characters"
@@ -34,6 +97,7 @@ Content-Type: application/json
 ###
 PATCH http://localhost:3000/api/images/000000000000000000000000
 Content-Type: application/json
+Authorization: Bearer JWT_PLACEHOLD
 
 {
   "name": "Name for non-existent image"

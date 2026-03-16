@@ -55,11 +55,28 @@ export class ImageProvider {
         return images[0] ?? null;
     }
 
+    async createImage({ src, name, authorId }) {
+        const insertResult = await this.collection.insertOne({
+            src,
+            name,
+            authorId,
+        });
+        return String(insertResult.insertedId);
+    }
+
     async updateImageName(imageId, newName) {
         const updateResult = await this.collection.updateOne(
             { _id: new ObjectId(imageId) },
             { $set: { name: newName } },
         );
         return updateResult.matchedCount;
+    }
+
+    async getImageAuthorId(imageId) {
+        const image = await this.collection.findOne(
+            { _id: new ObjectId(imageId) },
+            { projection: { authorId: 1 } },
+        );
+        return image?.authorId ?? null;
     }
 }

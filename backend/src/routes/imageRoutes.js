@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import { handleImageFileErrors, imageMiddlewareFactory } from "./imageUploadMiddleware.js";
 
 const MAX_NAME_LENGTH = 100;
 
@@ -7,6 +8,36 @@ function waitDuration(numMs) {
 }
 
 export function registerImageRoutes(app, imageProvider) {
+    app.post(
+        "/api/images",
+        imageMiddlewareFactory.single("image"),
+        handleImageFileErrors,
+        async (req, res) => {
+            const uploadedFile = req.file;
+            const imageName = req.body?.name;
+            const authorId = req.userInfo?.username;
+
+            if (!uploadedFile || typeof imageName !== "string" || imageName === "" || !authorId) {
+                return res.status(400).send({
+                    error: "Bad Request",
+                    message: "Request must include image file and name",
+                });
+            }
+
+            try {
+                const imageId = await imageProvider.createImage({
+                    src: `/uploads/${uploadedFile.filename}`,
+                    name: imageName,
+                    authorId,
+                });
+                return res.status(201).send({ id: imageId });
+            } catch (error) {
+                console.error("Failed to post /api/images", error);
+                return res.status(500).send(String(error));
+            }
+        },
+    );
+
     app.get("/api/images", async (req, res) => {
         try {
             await waitDuration(1000);
@@ -66,6 +97,22 @@ export function registerImageRoutes(app, imageProvider) {
         }
 
         try {
+            const imageAuthorId = await imageProvider.getImageAuthorId(imageId);
+            if (!imageAuthorId) {
+                return res.status(404).send({
+                    error: "Not Found",
+                    message: "Image does not exist"
+                });
+            }
+
+            const loggedInUsername = req.userInfo?.username;
+            if (loggedInUsername !== imageAuthorId) {
+                return res.status(403).send({
+                    error: "Forbidden",
+                    message: "This user does not own this image"
+                });
+            }
+
             const matchedCount = await imageProvider.updateImageName(imageId, newName);
             if (matchedCount === 0) {
                 return res.status(404).send({
